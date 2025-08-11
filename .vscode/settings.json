@@ -1,0 +1,22 @@
+{
+    "tailwind-fold.foldStyle": "QUOTES",
+    "tailwind-fold.unfoldIfLineSelected": true,
+    "tailwind-fold.foldedText": " tailwind",
+    "tailwind-fold.showTailwindImage": true,
+    "tailwind-fold.supportedLanguages": [
+        "html",
+        "typescriptreact",
+        "javascriptreact",
+        "typescript",
+        "javascript",
+        "vue-html",
+        "vue",
+        "php",
+        "markdown",
+        "coffeescript",
+        "svelte",
+        "astro",
+        "erb"
+    ],
+    "tailwind-fold.autoFold": true
+}
