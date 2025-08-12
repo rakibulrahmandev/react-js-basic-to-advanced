@@ -18,5 +18,8 @@
         "astro",
         "erb"
     ],
-    "tailwind-fold.autoFold": true
+    "tailwind-fold.autoFold": true,
+    "cSpell.words": [
+        "favourite"
+    ]
 }
