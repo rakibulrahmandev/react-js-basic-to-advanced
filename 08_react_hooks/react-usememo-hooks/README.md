@@ -1,12 +1,70 @@
-# React + Vite
+# React useMemo hooks explain.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## **What is `useMemo`?**
 
-Currently, two official plugins are available:
+`useMemo` is a **React hook** that **memoizes a value** — meaning it **remembers the result of a computation** and only recomputes it when its dependencies change. This is useful for **expensive calculations** that you don’t want to run on every render.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### Syntax:
 
-## Expanding the ESLint configuration
+```javascript
+const memoizedValue = useMemo(() => {
+  // Expensive computation here
+  return result;
+}, [dependencies]);
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **First argument:** A function that returns the value you want to memoize.
+* **Second argument:** An array of dependencies. The function will  **re-run only if one of these dependencies changes** .
+
+## Why use `useMemo`?
+
+* To **optimize performance** for expensive calculations.
+* To **prevent unnecessary recalculations** on every render.
+* Helps when passing **derived data** to child components to avoid re-renders.
+
+#### Example:
+
+```javascript
+import React, { useState, useMemo } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState("");
+
+  // Expensive calculation
+  const factorial = useMemo(() => {
+    console.log("Calculating factorial...");
+    const calculateFactorial = (n) => {
+      return n <= 1 ? 1 : n * calculateFactorial(n - 1);
+    };
+    return calculateFactorial(count);
+  }, [count]); // Only recalc if `count` changes
+
+  return (
+    <div>
+      <h1>Factorial of {count} is {factorial}</h1>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <input 
+        type="text" 
+        value={text} 
+        onChange={(e) => setText(e.target.value)} 
+        placeholder="Type something"
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+##### **Explanation:**
+
+* The factorial calculation runs  **only when `count` changes** .
+* Typing in the input does  **not recalculate factorial** , saving performance.
+
+## **Key Points**
+
+1. `useMemo` is for  **memoizing values** .
+2. Don’t use it for **side effects** (use `useEffect` for that).
+3. Overusing `useMemo` can actually **slow down** your app if the memoization itself is expensive. Use it only when needed.
+4. Commonly used with  **derived data, filtering, sorting, or expensive calculations** .
