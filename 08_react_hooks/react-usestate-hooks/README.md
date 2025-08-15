@@ -1,12 +1,65 @@
-# React + Vite
+# React useState hooks explain.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## What is useState?
 
-Currently, two official plugins are available:
+`useState` is a **React Hook** that lets you add state (data that changes over time) to a functional component.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Think of it like a **box** where you store a value, and React re-renders the component whenever that value changes.
 
-## Expanding the ESLint configuration
+## Syntax
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```javascript
+const [state, setState] = useState(initialValue);
+```
+
+* **`state`** → The current value stored.
+* **`setState`** → A function to update the value.
+* **`initialValue`** → The starting value for the state.
+
+## Example:
+
+```javascript
+import React, { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0); // count starts at 0
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+### How it works:
+
+* `useState(0)` creates a `count` variable starting at `0`.
+* When you click the button, `setCount(count + 1)` changes the value.
+* React **re-renders** the component with the new value.
+
+## Key Points
+
+* You can store  **any type** : number, string, array, object, boolean, etc.
+* State updates are **asynchronous** — React may batch updates for performance.
+* When state changes → component re-renders → UI updates automatically.
+* `useState` can be used multiple times in the same component.
+
+## Example with Multiple States:
+
+```javascript
+function Profile() {
+  const [name, setName] = useState("Rakibul");
+  const [age, setAge] = useState(20);
+
+  return (
+    <div>
+      <p>{name}, {age} years old</p>
+      <button onClick={() => setAge(age + 1)}>Increase Age</button>
+    </div>
+  );
+}
+```
