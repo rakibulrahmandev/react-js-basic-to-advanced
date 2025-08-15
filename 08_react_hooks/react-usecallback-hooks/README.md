@@ -1,12 +1,71 @@
-# React + Vite
+# React useCallback hooks explain.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## **What is `useCallback`?**
 
-Currently, two official plugins are available:
+`useCallback` is a **React hook** that  **memoizes a function** .
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It returns a **memoized version** of the callback function that only changes if one of the dependencies changes.
 
-## Expanding the ESLint configuration
+In simple words: it  **prevents a function from being recreated on every render** , unless its dependencies change.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+#### Syntax:
+
+```javascript
+const memoizedCallback = useCallback(
+  () => {
+    // your function logic
+  },
+  [dependencies]
+);
+```
+
+* **First argument:** The function you want to memoize.
+* **Second argument:** An array of dependencies. The function will only be recreated if one of these changes.
+
+## **Why use `useCallback`?**
+
+1. **Performance optimization:**
+   * Helps prevent unnecessary re-renders when passing functions to child components.
+2. **Stable function reference:**
+   * Useful if a child component depends on reference equality (`React.memo`, `useEffect`, or `useMemo`).
+
+#### Example:
+
+```javascript
+import React, { useState, useCallback } from "react";
+
+const Child = React.memo(({ handleClick }) => {
+  console.log("Child rendered");
+  return <button onClick={handleClick}>Click Me</button>;
+});
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  const increment = useCallback(() => {
+    setCount(c => c + 1);
+  }, []); // No dependencies, function reference is stable
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <Child handleClick={increment} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+##### **Explanation:**
+
+* Without `useCallback`, the `increment` function is recreated on every render.
+* With `useCallback`, the function reference stays the same, so `Child` doesn’t re-render unnecessarily (thanks to `React.memo`).
+
+## **Key Notes**
+
+* `useCallback(fn, [])` → memoizes `fn` **forever** until component unmounts.
+* Only useful if:
+  * Function is passed to **memoized child components**
+  * Function is used in **dependencies of `useEffect` or `useMemo`**
+* Overusing `useCallback` can make code  **more complex without performance benefits** .
